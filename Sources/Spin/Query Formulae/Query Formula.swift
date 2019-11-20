@@ -1,9 +1,10 @@
 // Spin © 2019 Constantino Tsarouhas
 
-import Fluent
+import Vapor
 
-public protocol Query {
+public protocol QueryFormula {
 	
+	/// The type of values produced by queries with this formula.
 	associatedtype Result
 	
 	/// Evaluates `self` on given connection.

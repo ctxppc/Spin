@@ -33,6 +33,8 @@ public protocol Component {
 	///
 	///     }
 	///
+	/// Components need not prepare their `body` for rendering. The renderer prepares subcomponents at an appropriate time.
+	///
 	/// A future version of Spin might remove this requirement.
 	///
 	/// The default implementation returns `self` unaltered.
@@ -42,7 +44,7 @@ public protocol Component {
 	///
 	/// An implementation of this method usually invokes the `add…`, `openElement`, and `closeElement` methods of the renderer as appropriate.
 	///
-	/// The default implementation renders the body. This method must be implemented on conforming types that don't support a body.
+	/// The default implementation renders `body`. This method must be implemented on conforming types that don't support a body.
 	///
 	/// - Parameter renderer: On input, a renderer with no produced nodes. On output, a renderer with zero or more produced nodes.
 	func render(into renderer: inout Renderer)

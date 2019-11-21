@@ -13,7 +13,7 @@ public struct QueryResult<Result> : DynamicProperty {
 	
 	/// The formula of the query to evaluate.
 	private let query: Query
-	public typealias Query = (DatabaseConnectable) -> Future<Result>
+	public typealias Query = (DatabaseConnectable) throws -> Future<Result>
 	
 	/// The result of the query.
 	public var wrappedValue: Result {
@@ -26,10 +26,14 @@ public struct QueryResult<Result> : DynamicProperty {
 	
 	// See protocol.
 	public func prepareForRendering(by renderer: Renderer) -> Future<Self> {
-		query(renderer.request).map { result in
-			var copy = self
-			copy.storedResult = result
-			return copy
+		do {
+			return try query(renderer.request).map { result in
+				var copy = self
+				copy.storedResult = result
+				return copy
+			}
+		} catch {
+			return renderer.request.future(error: error)
 		}
 	}
 	

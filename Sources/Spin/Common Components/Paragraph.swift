@@ -31,3 +31,14 @@ extension Paragraph where Contents == Text {
 	}
 	
 }
+
+extension Paragraph where Contents == FormattedText {
+	
+	/// Creates a paragraph containing given formatted text.
+	public init(formattedText: FormattedText) {
+		self.init {
+			formattedText
+		}
+	}
+	
+}

@@ -39,7 +39,7 @@ extension Future where T == [Node] {
 	fileprivate func serialised(for request: Request) -> Future<Response> {
 		map { nodes in
 			let body = nodes.map {
-				$0.stringRepresentation(depth: 0)
+				$0.stringRepresentation(depth: 0, renderingRootInline: false)
 			}.joined(separator: "\n")
 			return Response(
 				http:	.init(headers: ["Content-Type": "text/html; charset=utf-8"], body: body),

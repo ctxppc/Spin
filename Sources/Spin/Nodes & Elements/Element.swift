@@ -76,47 +76,64 @@ extension Element : Node {
 		self.classNames.formUnion(classNames)
 	}
 	
-	public func stringRepresentation(depth: Int = 0) -> String {
+	public func stringRepresentation(depth: Int = 0, renderingRootInline: Bool) -> String {
+		
+		let usesSelfClosingTag = subnodes.isEmpty && !explicitEndTag
+		let rendersBodyInline = subnodes.contains(where: { $0.isText })
+		
+		let startTag: String = {
+			
+			var attributes = self.attributes
+			if !classNames.isEmpty {
+				attributes["class"] = classNames.joined(separator: " ")
+			}
+			
+			let attributesSegment: String
+			if attributes.isEmpty {
+				attributesSegment = ""
+			} else {
+				let attributeList = attributes.map { key, value in
+					#"\#(key)="\#(value)""#
+				}.joined(separator: " ")
+				attributesSegment = " \(attributeList)"
+			}
+			
+			return usesSelfClosingTag ? "<\(tagName)\(attributesSegment) />" : "<\(tagName)\(attributesSegment)>"
+			
+		}()
+		
+		let body: String? = {
+			guard !subnodes.isEmpty else { return nil }
+			return subnodes.map {
+				$0.stringRepresentation(depth: depth + 1, renderingRootInline: rendersBodyInline)
+			}.joined(separator: rendersBodyInline ? "" : "\n")
+		}()
+		
+		let endTag = usesSelfClosingTag ? nil : "</\(tagName)>"
 		
 		let ind = indentation(depth: depth)
+		let indentedStartTag = ind + startTag
+		let indentedEndTag = endTag.map { ind + $0 }
 		
-		var attributes = self.attributes
-		if !classNames.isEmpty {
-			attributes["class"] = classNames.joined(separator: " ")
-		}
-		
-		let lead = "\(ind)<\(tagName)"
-		
-		let attributesSegment: String
-		if attributes.isEmpty {
-			attributesSegment = ""
-		} else {
-			let attributeList = attributes.map { key, value in
-				#"\#(key)="\#(value)""#
-				}.joined(separator: " ")
-			attributesSegment = " \(attributeList)"
-		}
-		
-		let remainder: String
-		if subnodes.isEmpty && !explicitEndTag {
-			remainder = " />"
-		} else {
+		switch (renderingRootInline, rendersBodyInline) {
 			
-			let inner = subnodes.map {
-				$0.stringRepresentation(depth: depth + 1)
-			}.joined(separator: "\n")
+			case (false, false):
+			return [indentedStartTag, body, indentedEndTag].compactMap { $0 }.joined(separator: "\n")
 			
-			remainder = """
-				>
-				\(inner)
-				\(ind)</\(tagName)>
-				"""
+			case (false, true):
+			return [indentedStartTag, body, endTag].compactMap { $0 }.joined()
+			
+			case (true, false):
+			return [startTag, body, indentedEndTag].compactMap { $0 }.joined(separator: "\n")
+			
+			case (true, true):
+			return [startTag, body, endTag].compactMap { $0 }.joined()
 			
 		}
-		
-		return lead + attributesSegment + remainder
 		
 	}
+	
+	public var isText: Bool { false }
 	
 }
 

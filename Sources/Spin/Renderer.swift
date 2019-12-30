@@ -180,13 +180,18 @@ private struct Gap : Node {
 	private var classNames: Set<String> = []
 	
 	// See protocol.
-	func stringRepresentation(depth: Int) -> String {
+	func stringRepresentation(depth: Int, renderingRootInline: Bool) -> String {
 		nodes.map { node in
 			var node = node
 			node.applyAttributes(attributes)
 			node.applyClassNames(classNames)
-			return node.stringRepresentation(depth: depth)
-		}.joined(separator: "\n")
+			return node.stringRepresentation(depth: depth, renderingRootInline: renderingRootInline)
+		}.joined(separator: renderingRootInline ? "" : "\n")
+	}
+	
+	// See protocol.
+	var isText: Bool {
+		nodes.contains(where: { $0 is TextNode })
 	}
 	
 }

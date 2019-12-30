@@ -41,8 +41,10 @@ extension TextNode : Node {
 	
 	public func applyClassNames(_ classNames: Set<String>) {}
 	
-	public func stringRepresentation(depth: Int) -> String {
-		.init(repeating: "\t", count: depth) + value
+	public func stringRepresentation(depth: Int, renderingRootInline: Bool) -> String {
+		renderingRootInline ? value : .init(repeating: "\t", count: depth) + value
 	}
+	
+	public var isText: Bool { true }
 	
 }

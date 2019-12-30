@@ -33,8 +33,10 @@ extension HTMLDTD : Node {
 	
 	public func applyClassNames(_ classNames: Set<String>) {}
 	
-	public func stringRepresentation(depth: Int) -> String {
-		indentation(depth: depth) + "<!DOCTYPE html>"
+	public func stringRepresentation(depth: Int, renderingRootInline: Bool) -> String {
+		(renderingRootInline ? "" : indentation(depth: depth)) + "<!DOCTYPE html>"
 	}
+	
+	public var isText: Bool { false }
 	
 }

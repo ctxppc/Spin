@@ -37,7 +37,7 @@ extension ControlledModel {
 	public static func authenticatedFind(_ identifier: ID, on request: Request) -> Future<Self?> {
 		Self.find(identifier, on: request).map { value in
 			guard let value = value else { return nil }
-			guard try value.accessPermission(on: request) >= .read else { throw ModelRetrievalError.unauthorised() }
+			try value.requirePermission(.read, on: request)
 			return value
 		}
 	}
@@ -45,7 +45,7 @@ extension ControlledModel {
 	/// Creates the value in the database after validating its write permission on the given request.
 	public func authenticatedCreate(on request: Request) -> Future<Self> {
 		Future.flatMap(on: request) {
-			guard try self.accessPermission(on: request) >= .full else { throw ModelSavingError.unauthorised() }
+			try self.requirePermission(.full, on: request)
 			return self.create(on: request)
 		}
 	}
@@ -53,7 +53,7 @@ extension ControlledModel {
 	/// Saves the value after validating its write permission on the given request.
 	public func authenticatedSave(on request: Request) -> Future<Self> {
 		Future.flatMap(on: request) {
-			guard try self.accessPermission(on: request) >= .full else { throw ModelSavingError.unauthorised() }
+			try self.requirePermission(.full, on: request)
 			return self.save(on: request)
 		}
 	}
@@ -61,9 +61,14 @@ extension ControlledModel {
 	/// Updates the value after validating its write permission on the given request.
 	public func authenticatedUpdate(on request: Request, originalID: ID? = nil) -> Future<Self> {
 		Future.flatMap(on: request) {
-			guard try self.accessPermission(on: request) >= .full else { throw ModelSavingError.unauthorised() }
+			try self.requirePermission(.full, on: request)
 			return self.update(on: request, originalID: originalID)
 		}
+	}
+	
+	/// Validates whether given request has at least given permission.
+	public func requirePermission(_ permission: AccessPermission, on request: Request) throws {
+		guard try accessPermission(on: request) >= permission else { throw ModelSavingError.unauthorised() }
 	}
 	
 }

@@ -2,11 +2,11 @@
 
 import DepthKit
 
-/// A semantically insignificant span in a document.
+/// An interactive element that accepts text.
 public struct TextField : Component {
 	
 	/// Creates a text field.
-	public init(name: String, value: String = "", placeholder: String = "", kind: Kind = .plain, required: Bool = false, editable: Bool = true) {
+	public init(name: String, value: String = "", placeholder: String = "", kind: Kind = .shortform, required: Bool = false, editable: Bool = true) {
 		self.name = name
 		self.value = value
 		self.placeholder = placeholder
@@ -16,7 +16,7 @@ public struct TextField : Component {
 	}
 	
 	/// Creates a text field.
-	public init<Action : ActionProtocol>(for action: Action.Type = Action.self, key: Action.CodingKeys, value: String = "", placeholder: String = "", kind: Kind = .plain, required: Bool = false, editable: Bool = true) {
+	public init<Action : ActionProtocol>(for action: Action.Type = Action.self, key: Action.CodingKeys, value: String = "", placeholder: String = "", kind: Kind = .shortform, required: Bool = false, editable: Bool = true) {
 		self.name = key.stringValue
 		self.value = value
 		self.placeholder = placeholder
@@ -37,10 +37,11 @@ public struct TextField : Component {
 	/// The kind of text field.
 	private let kind: Kind
 	public enum Kind : String {
-		case plain = "text"
+		case shortform = "text"
 		case email
 		case password
 		case search
+		case longform
 	}
 	
 	/// A Boolean value indicating whether the text field must contain a value before it can be submitted.
@@ -57,17 +58,27 @@ public struct TextField : Component {
 	// See protocol.
 	public func render(into renderer: inout Renderer) {
 		
-		var attributes = ["type": kind.rawValue, "name": name]
+		let isLongForm = kind == .longform
 		
-		let newValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
-		!newValue.isEmpty --> (attributes["value"] = newValue)
+		var attributes = ["name": name]
+		
+		!isLongForm --> (attributes["type"] = kind.rawValue)
+		
+		let value = self.value.trimmingCharacters(in: .whitespacesAndNewlines)
+		(!value.isEmpty && !isLongForm) --> (attributes["value"] = value)
 		
 		let newPlaceholder = placeholder.trimmingCharacters(in: .whitespacesAndNewlines)
 		!newPlaceholder.isEmpty --> (attributes["placeholder"] = newPlaceholder)
 		
 		required --> (attributes["required"] = "true")
 		
-		renderer.addNode(Element(tagName: "input", classNames: ["form-control", "mr-sm-2"], attributes: attributes))
+		!editable --> (attributes["readonly"] = "true")
+		
+		renderer.addNode(Element(
+			tagName:	isLongForm ? "textarea" : "input",
+			attributes:	attributes,
+			subnodes:	isLongForm ? [TextNode(value)] : []
+		))
 		
 	}
 	

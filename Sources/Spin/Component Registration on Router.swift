@@ -34,7 +34,7 @@ extension Router {
 	}
 	
 	/// Registers given component type on the router.
-	public func register<Component : ActionableComponent>(_ componentType: Component.Type) where Component.Action.Result : Codable {
+	public func register<Component : ActionableComponent>(_ componentType: Component.Type) where Component.Action : RedirectingAction {
 		
 		register(route: Route(path: componentType.pathComponents(for: .GET), output: BasicResponder { request in
 			let location = try LocationDecoder.location(ofType: Component.Location.self, from: request.http.url.pathComponents.dropFirst())
@@ -48,9 +48,12 @@ extension Router {
 		register(route: Route(path: componentType.pathComponents(for: .POST), output: BasicResponder { request in
 			let location: Component.Location = try LocationDecoder.location(from: request.http.url.pathComponents.dropFirst())
 			return try request.content.decode(Component.Action.self)
-				.flatMap { $0.execute(on: request, location: location) }
-				.map { result in
-					request.redirect(to: try Component.Action.url(for: result, location: location).absoluteString, type: .normal)
+				.flatMap { action in
+					action.execute(on: request, location: location).map { (action, $0) }
+				}.map {
+					let (action, result) = $0
+					let newLocation = action.location(for: result, originalLocation: location)
+					return request.redirect(to: try Component.Action.url(for: result, location: newLocation).absoluteString, type: .normal)
 				}
 		}))
 		

@@ -6,8 +6,6 @@ import Vapor
 /// A value that encapsulates the information necessary for performing an action.
 ///
 /// Actions work in conjunction with actionable components (cf. `ActionableComponent`). When the server receives an action, the system looks up the actionable component type that is registered for the location, creates an instance of the associated action type, executes it, then uses the action's result to create an instance of the actionable component type.
-///
-/// If `Result` conforms to `Codable`, the system creates a `304 See Other` redirection response redirecting to the actionable component via a `GET` request. The result is encoded in the URL.
 public protocol ActionProtocol : Content {
 	
 	/// The type of values that can be used to encode an action on a client.
@@ -26,13 +24,32 @@ public protocol ActionProtocol : Content {
 	
 }
 
-extension ActionProtocol where Result : Codable {
+/// An action whose result is presented after a redirection.
+///
+/// Instead of rendering the actionable component in the response of the `POST` request, the system creates a `304 See Other` redirection response redirecting to the actionable component via a `GET` request. The result is encoded in the URL.
+public protocol RedirectingAction : ActionProtocol where Result : Codable {
+	
+	/// Returns a location for presenting the result.
+	///
+	/// The result is encoded separately in the URL.
+	///
+	/// The default implementation returns `originalLocation`.
+	func location(for result: Result, originalLocation: Location) -> Location
+	
+}
+
+extension RedirectingAction {
 	
 	/// Creates a URL encoding given result.
 	static func url(for result: Result, location: Location) throws -> URL {
 		var urlComponents = NSURLComponents(url: try location.urlRepresentation(), resolvingAgainstBaseURL: false)! as URLComponents
 		urlComponents.percentEncodedQuery = try String(bytes: URLEncodedFormEncoder().encode(result), encoding: .utf8)
 		return urlComponents.url!
+	}
+	
+	// See protocol.
+	func location(for result: Result, originalLocation: Location) -> Location {
+		originalLocation
 	}
 	
 }

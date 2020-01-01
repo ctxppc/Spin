@@ -7,7 +7,7 @@ struct LocationDecoder : Decoder {
 	/// Converts given path to a location.
 	///
 	/// - Parameter path: An array of path elements. The root path `/` is represented by an empty array.
-	static func location<Location : LocationProtocol, Path : Sequence>(from path: Path) throws -> Location where Path.Element == String {
+	static func location<Location : LocationProtocol, Path : Sequence>(ofType _: Location.Type = Location.self, from path: Path) throws -> Location where Path.Element == String {
 		try Location(from:
 			Self(valuesByKey:
 				Dictionary(uniqueKeysWithValues:

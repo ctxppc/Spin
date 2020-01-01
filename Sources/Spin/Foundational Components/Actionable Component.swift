@@ -14,4 +14,3 @@ public protocol ActionableComponent : LocatableComponent {
 	init(location: Location, result: Action.Result)
 	
 }
-

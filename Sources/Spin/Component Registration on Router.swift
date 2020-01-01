@@ -10,14 +10,6 @@ extension Router {
 	}
 	
 	/// Registers given component type on the router.
-	private func registerLocatableComponentType<Component : LocatableComponent>(_ componentType: Component.Type) {
-		register(route: Route(path: componentType.pathComponents(for: .GET), output: BasicResponder { request in
-			Renderer.render(Component(location: try LocationDecoder.location(from: request.http.url.pathComponents.dropFirst())).context(\.request, request), for: request)
-				.serialised(for: request)
-		}))
-	}
-	
-	/// Registers given component type on the router.
 	public func register<Component : ActionableComponent>(_ componentType: Component.Type) {
 		registerLocatableComponentType(componentType)
 		register(route: Route(path: componentType.pathComponents(for: .POST), output: BasicResponder { request in
@@ -31,6 +23,37 @@ extension Router {
 					).context(\.request, request), for: request).serialised(for: request)
 				}
 		}))
+	}
+	
+	/// Registers given component type on the router.
+	private func registerLocatableComponentType<Component : LocatableComponent>(_ componentType: Component.Type) {
+		register(route: Route(path: componentType.pathComponents(for: .GET), output: BasicResponder { request in
+			Renderer.render(Component(location: try LocationDecoder.location(from: request.http.url.pathComponents.dropFirst())).context(\.request, request), for: request)
+				.serialised(for: request)
+		}))
+	}
+	
+	/// Registers given component type on the router.
+	public func register<Component : ActionableComponent>(_ componentType: Component.Type) where Component.Action.Result : Codable {
+		
+		register(route: Route(path: componentType.pathComponents(for: .GET), output: BasicResponder { request in
+			let location = try LocationDecoder.location(ofType: Component.Location.self, from: request.http.url.pathComponents.dropFirst())
+			let component = request.http.url.query != nil
+				? Component(location: location, result: try request.query.decode(Component.Action.Result.self))
+				: Component(location: location)
+			return Renderer.render(component.context(\.request, request), for: request)
+				.serialised(for: request)
+		}))
+		
+		register(route: Route(path: componentType.pathComponents(for: .POST), output: BasicResponder { request in
+			let location: Component.Location = try LocationDecoder.location(from: request.http.url.pathComponents.dropFirst())
+			return try request.content.decode(Component.Action.self)
+				.flatMap { $0.execute(on: request, location: location) }
+				.map { result in
+					request.redirect(to: try Component.Action.url(for: result, location: location).absoluteString, type: .normal)
+				}
+		}))
+		
 	}
 	
 }

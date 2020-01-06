@@ -39,16 +39,16 @@ public struct Link<Contents : Component> : Component {
 extension Link where Contents == Text {
 	
 	/// Creates a link referencing given URL and containing given text.
-	public init(to location: URL, text: String) {
+	public init(to location: URL, label: String) {
 		self.init(to: location) {
-			Text(text)
+			Text(label)
 		}
 	}
 	
 	/// Creates a link referencing given component and containing given text.
-	public init<C : LocatableComponent>(to component: C, text: String) {
+	public init<C : LocatableComponent>(to component: C, label: String) {
 		self.init(to: component) {
-			Text(text)
+			Text(label)
 		}
 	}
 	

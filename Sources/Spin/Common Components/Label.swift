@@ -1,6 +1,6 @@
 // Spin © 2019 Constantino Tsarouhas
 
-/// A semantically insignificant division in a document.
+/// A label for an input element.
 public struct Label<Contents : Component> : ElementComponent {
 	
 	public init(for identifier: String, @ComponentBuilder contents: @escaping () -> Contents) {
@@ -24,7 +24,7 @@ public struct Label<Contents : Component> : ElementComponent {
 
 extension Label where Contents == Text {
 	
-	/// Creates a paragraph containing given text.
+	/// Creates a label containing given text.
 	public init(for identifier: String, text: String) {
 		self.init(for: identifier) {
 			Text(text)

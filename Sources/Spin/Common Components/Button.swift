@@ -30,17 +30,17 @@ public struct Button<Contents : Component> : ElementComponent {
 
 extension Button where Contents == Text {
 	
-	/// Creates a button containing given text.
-	public init(_ text: String) {
+	/// Creates a button containing given label.
+	public init(label: String) {
 		self.init {
-			Text(text)
+			Text(label)
 		}
 	}
 	
-	/// Creates a button performing given action and containing given text.
-	public init<Action : DifferentiatedAction>(for type: Action.Type, kind: Action.Kind, _ text: String) {
+	/// Creates a button performing given action and containing given label.
+	public init<Action : DifferentiatedAction>(for type: Action.Type, label: String, kind: Action.Kind) {
 		self.init(for: type, kind: kind) {
-			Text(text)
+			Text(label)
 		}
 	}
 	

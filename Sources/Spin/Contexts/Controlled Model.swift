@@ -50,7 +50,7 @@ extension ControlledModel {
 		}
 	}
 	
-	/// Saves the value after validating its write permission on the given request.
+	/// Saves the value in the database after validating its write permission on the given request.
 	public func authenticatedSave(on request: Request) -> Future<Self> {
 		Future.flatMap(on: request) {
 			try self.requirePermission(.full, on: request)
@@ -58,11 +58,19 @@ extension ControlledModel {
 		}
 	}
 	
-	/// Updates the value after validating its write permission on the given request.
+	/// Updates the value on the database after validating its write permission on the given request.
 	public func authenticatedUpdate(on request: Request, originalID: ID? = nil) -> Future<Self> {
 		Future.flatMap(on: request) {
 			try self.requirePermission(.full, on: request)
 			return self.update(on: request, originalID: originalID)
+		}
+	}
+	
+	/// Deletes the value on the database after validating its write permission on the given request.
+	public func authenticatedDelete(on request: Request, force: Bool = false) -> Future<()> {
+		Future.flatMap(on: request) {
+			try self.requirePermission(.full, on: request)
+			return self.delete(force: force, on: request)
 		}
 	}
 	

@@ -86,7 +86,7 @@ public struct Renderer {
 			case _:
 			let index = nodes.indices.last!
 			let innerPath = nodes[index].appendNode(node, depth: openingDepth - 1)
-			return IndexPath(index: index).appending(innerPath)
+			return [index] + innerPath
 			
 		}
 	}
@@ -195,3 +195,5 @@ private struct Gap : Node {
 	}
 	
 }
+
+public typealias IndexPath = [Int]

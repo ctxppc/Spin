@@ -43,7 +43,7 @@ extension Element : Node {
 			case _:
 			let index = subnodes.indices.last!
 			let innerPath = subnodes[index].appendNode(node, depth: depth - 1)
-			return IndexPath(index: index).appending(innerPath)
+			return [index] + innerPath
 			
 		}
 	}
@@ -54,7 +54,7 @@ extension Element : Node {
 			if indexPath.isEmpty {
 				return self
 			} else {
-				return subnodes[indexPath[0]][indexPath.dropFirst()]
+				return subnodes[indexPath[0]][IndexPath(indexPath.dropFirst())]
 			}
 		}
 		
@@ -62,7 +62,7 @@ extension Element : Node {
 			switch indexPath.count {
 				case 0:	self = newValue as! Self
 				case 1:	subnodes[indexPath[0]] = newValue
-				case _:	subnodes[indexPath[0]][indexPath.dropFirst()] = newValue
+				case _:	subnodes[indexPath[0]][IndexPath(indexPath.dropFirst())] = newValue
 			}
 		}
 		

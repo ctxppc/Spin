@@ -6,6 +6,8 @@ public protocol LocatableComponent : Component {
 	associatedtype Location : LocationProtocol
 	
 	/// Creates an instance of `Self` with given location.
+	///
+	/// - Parameter location: The location of the component.
 	init(location: Location)
 	
 	/// The component's location.

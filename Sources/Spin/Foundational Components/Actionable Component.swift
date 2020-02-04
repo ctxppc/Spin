@@ -8,9 +8,18 @@ public protocol ActionableComponent : LocatableComponent {
 	/// The type of actions that components can act upon.
 	associatedtype Action : ActionProtocol where Action.Location == Self.Location
 	
-	/// Creates an instance of `Self` with a given location and action result.
+	/// Creates an instance for presenting a successfully completed action.
 	///
-	/// This initialiser is used instead of `init(location:)` when a component of this type is retrieved after executing an action.
-	init(location: Location, result: Action.Result)
+	/// - Parameter location: The location of the component.
+	/// - Parameter action: The action that completed.
+	/// - Parameter error: The result of the action.
+	init(location: Location, action: Action, result: Action.Result)
+	
+	/// Creates an instance for presenting a failed action.
+	///
+	/// - Parameter location: The location of the component.
+	/// - Parameter action: The action that failed.
+	/// - Parameter error: The error produced during execution of the action.
+	init(location: Location, action: Action, error: Action.Error)
 	
 }

@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A container component consisting of two components in succession.
 ///

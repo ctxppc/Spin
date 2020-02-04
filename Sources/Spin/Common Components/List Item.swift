@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A component representing an HTML document.
 public struct ListItem<Contents : Component> : ElementComponent {

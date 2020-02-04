@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A semantically insignificant span in a document.
 public struct Span<Contents : Component> : ElementComponent {

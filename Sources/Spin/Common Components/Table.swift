@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A component that presents tabulated data.
 public struct Table<Contents : Component> : ElementComponent {

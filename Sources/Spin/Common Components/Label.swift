@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A label for an input element.
 public struct Label<Contents : Component> : ElementComponent {

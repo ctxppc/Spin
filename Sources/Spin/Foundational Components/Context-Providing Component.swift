@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A component specifying a contextual value to be made available to descendants.
 private struct ContextProvidingComponent<Value, InnerComponent : Component> : Component {

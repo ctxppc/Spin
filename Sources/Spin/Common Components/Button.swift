@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// An actionable button in a document.
 public struct Button<Contents : Component> : ElementComponent {

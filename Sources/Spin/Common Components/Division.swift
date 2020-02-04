@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A semantically insignificant division in a document.
 public struct Division<Contents : Component> : ElementComponent {

@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A group of input elements in a form.
 public struct FieldGroup<Contents : Component> : ElementComponent {

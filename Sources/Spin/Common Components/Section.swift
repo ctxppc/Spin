@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A section in a document or article.
 public struct Section<Contents : Component> : ElementComponent {

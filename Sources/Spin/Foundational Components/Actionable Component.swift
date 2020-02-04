@@ -1,4 +1,4 @@
-// Spin © 2019 Constantino Tsarouhas
+// Spin © 2019–2020 Constantino Tsarouhas
 
 /// A locatable component that can receive actions (e.g., from submitted HTML forms) and act upon them.
 ///

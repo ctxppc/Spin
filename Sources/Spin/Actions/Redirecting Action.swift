@@ -27,9 +27,8 @@ extension RedirectingAction {
 	
 	/// Creates a URL encoding given result.
 	static func url(for status: RedirectingActionStatus<Self>, location: Location) throws -> URL {
-		var urlComponents = NSURLComponents(url: try location.urlRepresentation(), resolvingAgainstBaseURL: false)! as URLComponents
-		urlComponents.percentEncodedQuery = try String(bytes: URLEncodedFormEncoder().encode(status), encoding: .utf8)
-		return urlComponents.url!
+		let query = String(bytes: try URLEncodedFormEncoder().encode(status), encoding: .utf8)!
+		return URL(string: "\(try location.urlRepresentation())?\(query)")!		// FIXME: Implement with URL components instead once the percent-encoding issue has been fixed in Vapor.
 	}
 	
 	// See protocol.

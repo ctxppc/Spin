@@ -23,6 +23,6 @@ public protocol ActionProtocol : Content {
 	/// Executes the action.
 	///
 	/// Spin invokes this method and uses the result to create the actionable component that can present or otherwise handle the result. Any produced errors that are not of type `Self.Error` are logged and converted to `Self.Error.unexpected`.
-	func execute(on request: Request, location: Location) -> Future<Result>
+	func execute(on request: Request, location: Location) throws -> Future<Result>
 	
 }

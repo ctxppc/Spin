@@ -20,7 +20,9 @@ extension Router {
 			let location: Component.Location = try LocationDecoder.location(from: request.pathComponents)
 			return try request.content.decode(Component.Action.self)
 				.flatMap { action in
-					action.execute(on: request, location: location).flatMap { result in
+					Future.flatMap(on: request) {
+						try action.execute(on: request, location: location)
+					}.flatMap { result in
 						Renderer.render(Component(
 							location:	location,
 							action:		action,
@@ -90,7 +92,9 @@ extension Router {
 			let location: Component.Location = try LocationDecoder.location(from: request.pathComponents)
 			return try request.content.decode(Component.Action.self)
 				.flatMap { action in
-					action.execute(on: request, location: location).map { result in
+					Future.flatMap(on: request) {
+						try action.execute(on: request, location: location)
+					}.map { result in
 						let newLocation = action.location(for: result, originalLocation: location)
 						let status = RedirectingActionStatus(action: action, result: result, error: nil)
 						return request.redirect(to: try Component.Action.url(for: status, location: newLocation).absoluteString, type: .normal)

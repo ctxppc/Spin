@@ -6,6 +6,11 @@ import Vapor
 @propertyWrapper
 public struct FutureValue<Value> : DynamicProperty {
 	
+	/// Creates a future value property.
+	public init(producer: @escaping Producer) {
+		self.producer = producer
+	}
+	
 	/// The value.
 	public var wrappedValue: Value {
 		guard let result = storedValue else { preconditionFailure("Accessing future value that hasn't been prepared properly") }
@@ -15,12 +20,15 @@ public struct FutureValue<Value> : DynamicProperty {
 	/// The value, or `nil` if the promise hasn't been fulfilled.
 	private var storedValue: Value?
 	
-	/// The future containing the value.
-	private let future: Future<Value>
+	/// A function producing the future value.
+	private let producer: Producer
+	public typealias Producer = (Request) throws -> Future<Value>
 	
 	// See protocol.
 	public func prepareForRendering(by renderer: Renderer) -> Future<Self> {
-		future.map { value in
+		Future.flatMap(on: renderer.request) {
+			try self.producer(renderer.request)
+		}.map { value in
 			var copy = self
 			copy.storedValue = value
 			return copy

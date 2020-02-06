@@ -93,7 +93,7 @@ extension Element : Node {
 				attributesSegment = ""
 			} else {
 				let attributeList = attributes.map { key, value in
-					#"\#(key)="\#(value)""#
+					#"\#(key)="\#(value.htmlEscaped())""#
 				}.joined(separator: " ")
 				attributesSegment = " \(attributeList)"
 			}

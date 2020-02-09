@@ -5,7 +5,7 @@ import Vapor
 
 /// A dynamic property that evaluates to the result of a database query.
 @propertyWrapper
-public struct QueryResult<Result> : DynamicProperty {
+public struct QueryResult<Result> /*: DynamicProperty*/ {
 	
 	/// Creates a query result with given query.
 	public init(_ query: @escaping Query) {

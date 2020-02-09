@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// A semantically insignificant span in a document.
 public struct Span<Contents : Component> : ElementComponent {
 	

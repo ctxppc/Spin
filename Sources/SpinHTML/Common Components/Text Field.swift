@@ -1,6 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
 import DepthKit
+import SpinCore
 
 /// An interactive element that accepts text.
 public struct TextField : Component {

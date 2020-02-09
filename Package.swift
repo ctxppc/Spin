@@ -7,7 +7,7 @@ let package = Package(
 	name: "Spin",
 	platforms: [.macOS(.v10_15)],
 	products: [
-		.library(name: "Spin", targets: ["Spin"]),
+		.library(name: "Spin", targets: ["SpinCore", "SpinHTML"]),
 	],
 	dependencies: [
 		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.8.0")),
@@ -15,6 +15,7 @@ let package = Package(
 		.package(url: "https://github.com/vapor/fluent.git", from: "3.0.0"),
 	],
 	targets: [
-		.target(name: "Spin",  dependencies: ["Vapor", "DepthKit", "Fluent"]),
+		.target(name: "SpinCore",  dependencies: ["Vapor", "DepthKit", "Fluent"]),
+		.target(name: "SpinHTML",  dependencies: ["SpinCore", "DepthKit"]),
 	]
 )

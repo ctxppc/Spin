@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// A group of input elements in a form.
 public struct FieldGroup<Contents : Component> : ElementComponent {
 	

@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 public struct FormattedText : Component {
 	
 	/// Creates a formatted text component.

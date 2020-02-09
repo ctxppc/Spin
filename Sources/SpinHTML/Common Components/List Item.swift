@@ -1,14 +1,16 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// A component representing an HTML document.
-public struct Paragraph<Contents : Component> : ElementComponent {
+public struct ListItem<Contents : Component> : ElementComponent {
 	
 	public init(@ComponentBuilder contents: @escaping () -> Contents) {
 		self.contents = contents
 	}
 	
 	// See protocol.
-	public let tagName = "p"
+	public let tagName = "li"
 	
 	// See protocol.
 	public var classNames: Set<String> = []
@@ -21,23 +23,12 @@ public struct Paragraph<Contents : Component> : ElementComponent {
 	
 }
 
-extension Paragraph where Contents == Text {
+extension ListItem where Contents == Text {
 	
-	/// Creates a paragraph containing given text.
+	/// Creates a list item containing given text.
 	public init(_ text: String) {
 		self.init {
 			Text(text)
-		}
-	}
-	
-}
-
-extension Paragraph where Contents == FormattedText {
-	
-	/// Creates a paragraph containing given formatted text.
-	public init(formattedText: FormattedText) {
-		self.init {
-			formattedText
 		}
 	}
 	

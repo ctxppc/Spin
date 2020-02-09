@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// A component representing an HTML document.
 public struct List<Contents : Component> : ElementComponent {
 	

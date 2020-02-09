@@ -1,6 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
 import Foundation
+import SpinCore
 
 /// A component representing an HTML document.
 public struct Link<Contents : Component> : Component {

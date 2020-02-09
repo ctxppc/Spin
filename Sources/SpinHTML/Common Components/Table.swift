@@ -1,14 +1,16 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
-/// A component representing an HTML document.
-public struct NavigationArea<Contents : Component> : ElementComponent {
+import SpinCore
+
+/// A component that presents tabulated data.
+public struct Table<Contents : Component> : ElementComponent {
 	
 	public init(@ComponentBuilder contents: @escaping () -> Contents) {
 		self.contents = contents
 	}
 	
 	// See protocol.
-	public let tagName = "nav"
+	public let tagName = "table"
 	
 	// See protocol.
 	public var classNames: Set<String> = []

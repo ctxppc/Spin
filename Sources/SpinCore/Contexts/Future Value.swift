@@ -4,7 +4,7 @@ import Vapor
 
 /// A dynamic property that evaluates to a future value.
 @propertyWrapper
-public struct FutureValue<Value> : DynamicProperty {
+public struct FutureValue<Value> /*: DynamicProperty*/ {
 	
 	/// Creates a future value property.
 	public init(producer: @escaping Producer) {

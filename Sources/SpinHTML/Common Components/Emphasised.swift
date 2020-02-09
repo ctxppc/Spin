@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// A component representing an emphasised span of text or other content.
 public struct Emphasised<Contents : Component> : ElementComponent {
 	

@@ -23,7 +23,7 @@ public struct Contextual<Value> {
 	
 }
 
-extension Contextual : DynamicProperty {
+extension Contextual /*: DynamicProperty*/ {
 	public func prepareForRendering(by renderer: Renderer) -> Future<Self> {
 		var copy = self
 		copy.storedValue = renderer.context[keyPath]

@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// An actionable button in a document.
 public struct Button<Contents : Component> : ElementComponent {
 	

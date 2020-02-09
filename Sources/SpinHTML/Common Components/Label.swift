@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// A label for an input element.
 public struct Label<Contents : Component> : ElementComponent {
 	

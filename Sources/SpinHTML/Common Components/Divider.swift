@@ -1,5 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
+import SpinCore
+
 /// A component representing a divider between different segments of a document.
 public struct Divider : ElementComponent {
 	

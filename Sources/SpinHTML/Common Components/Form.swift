@@ -1,6 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
 import Foundation
+import SpinCore
 
 /// A form that can be submitted.
 public struct Form<Contents : Component> : Component {

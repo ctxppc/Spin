@@ -5,7 +5,7 @@ import Vapor
 
 /// A value that encapsulates the specific state in which a component is rendered.
 ///
-/// The context of a component is set up by its ancestor components and by the system. It is a mechanism by which information can flow from parent component to child components which having to define a property for every possible piece of information that needs to flow downwards.
+/// The context of a component is set up by its ancestor components and by the system. It is a mechanism by which information can flow from parent component to child components without having to define a property for every possible piece of information that needs to flow downwards. It additionally allows the system to asynchronously pass external information (like query results from a database) to components.
 ///
 /// # `@Contextual` Properties
 ///
@@ -38,6 +38,12 @@ import Vapor
 ///		}
 ///
 /// Prefer contextual properties above ordinary properties when propagation makes sense, like a database connection or the text font.
+///
+/// # External Properties
+///
+/// In addition to propagating contextual properties, contexts also encapsulate external properties. These properties contain values that are requested by a component but originate outside of Spin, like data from a file or server, or query results from a database.
+///
+/// External properties are assigned by the system and propagate through all components.
 public struct Context {
 	
 	/// Creates an empty context.

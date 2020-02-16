@@ -7,7 +7,7 @@ struct ModifiedComponent<Content : Component, ModifierType : Modifier> : Compone
 	let content: Content
 	
 	/// The modifier.
-	let modifier: Modifier
+	let modifier: ModifierType
 	
 	// See protocol.
 	var body: some Component {

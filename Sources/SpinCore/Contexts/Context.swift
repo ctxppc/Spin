@@ -49,15 +49,30 @@ public struct Context {
 	/// Creates an empty context.
 	internal init() {
 		self.contextualValuesByKeyPath = [:]
+		self.externalValuesByDescription = [:]
 	}
-	
-	/// The contextual values by key path.
-	private var contextualValuesByKeyPath: [PartialKeyPath<Self> : Any]
 	
 	/// Accesses the contextual value at a given key path.
 	public internal(set) subscript <Value>(keyPath: KeyPath<Context, Value>) -> Value {
 		get { (contextualValuesByKeyPath[keyPath as PartialKeyPath] !! "Contextual value not available") as! Value }
 		set { contextualValuesByKeyPath[keyPath as PartialKeyPath] = newValue }
 	}
+	
+	/// The contextual values, keyed by key path.
+	private var contextualValuesByKeyPath: [PartialKeyPath<Self> : Any]
+	
+	/// Accesses the value for a given external property.
+	private subscript <Property : ExternalProperty>(property: Property) -> Property.Value {
+		get { (externalValuesByDescription[.init(property.description)] !! "External value not available") as! Property.Value }
+		set { externalValuesByDescription[.init(property.description)] = newValue }
+	}
+	
+	/// Fulfills given external property description with given external property value.
+	mutating func fulfill(_ description: AnyExternalPropertyDescription, with value: Any) {
+		externalValuesByDescription[description] = value
+	}
+	
+	/// The external values, keyed by external property description.
+	private var externalValuesByDescription: [AnyExternalPropertyDescription : Any]
 	
 }

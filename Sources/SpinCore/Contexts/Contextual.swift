@@ -24,9 +24,9 @@ public struct Contextual<Value> {
 }
 
 extension Contextual /*: DynamicProperty*/ {
-	public func prepareForRendering(by renderer: Renderer) -> Future<Self> {
+	public func prepareForRendering(by renderer: Renderer) -> EventLoopFuture<Self> {
 		var copy = self
 		copy.storedValue = renderer.context[keyPath]
-		return renderer.request.future(copy)
+		return renderer.request.eventLoop.makeSucceededFuture(copy)
 	}
 }

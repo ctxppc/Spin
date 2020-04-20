@@ -8,7 +8,7 @@ import Vapor
 public protocol ExternalPropertyDescription : Hashable {
 	
 	/// Retrieves the value.
-	func value(context: Context) -> Future<Value>
+	func value(context: Context) -> EventLoopFuture<Value>
 	associatedtype Value
 	
 }
@@ -24,13 +24,13 @@ public struct AnyExternalPropertyDescription : ExternalPropertyDescription {
 	}
 	
 	// See protocol.
-	public func value(context: Context) -> Future<Any> {
+	public func value(context: Context) -> EventLoopFuture<Any> {
 		valueGenerator(context)
 	}
 	
 	/// A witness for the `ExternalPropertyDescription` conformance.
 	private let valueGenerator: ValueGenerator
-	typealias ValueGenerator = (Context) -> Future<Any>
+	typealias ValueGenerator = (Context) -> EventLoopFuture<Any>
 	
 	// See protocol.
 	public func hash(into hasher: inout Hasher) {

@@ -11,12 +11,12 @@ import Vapor
 public struct Renderer {
 	
 	/// Renders given component.
-	public static func render<C : Component>(_ component: C, for request: Request) -> Future<[Node]> {
+	public static func render<C : Component>(_ component: C, for request: Request) -> EventLoopFuture<[Node]> {
 		render(component, for: request, context: .init())
 	}
 	
 	/// Renders given component.
-	private static func render<C : Component>(_ component: C, for request: Request, context: Context) -> Future<[Node]> {
+	private static func render<C : Component>(_ component: C, for request: Request, context: Context) -> EventLoopFuture<[Node]> {
 		let renderer = Renderer(request: request, context: context)
 		return component.prepareForRendering(by: renderer).flatMap { component in
 			var renderer = renderer
@@ -38,7 +38,7 @@ public struct Renderer {
 	public private(set) var nodes: [Node] = []
 	
 	/// The future completions for all gaps.
-	private var futureGapCompletions: [Future<GapCompletion>] = []
+	private var futureGapCompletions: [EventLoopFuture<GapCompletion>] = []
 	private struct GapCompletion {
 		let indexPath: IndexPath
 		let nodes: [Node]
@@ -113,8 +113,8 @@ public struct Renderer {
 	internal var context = Context()
 	
 	/// Returns the nodes produced by the component being rendered.
-	public func producedNodes() -> Future<[Node]> {
-		Future.reduce(into: self, futureGapCompletions, eventLoop: request.eventLoop) { renderer, gapCompletion in
+	public func producedNodes() -> EventLoopFuture<[Node]> {
+		EventLoopFuture.reduce(into: self, futureGapCompletions, on: request.eventLoop) { renderer, gapCompletion in
 			renderer.materialiseGap(at: gapCompletion.indexPath, with: gapCompletion.nodes)
 		}.map { renderer in
 			

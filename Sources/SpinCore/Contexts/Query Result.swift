@@ -15,7 +15,7 @@ public struct QueryResult<Result> /*: DynamicProperty*/ {
 	
 	/// The formula of the query to evaluate.
 	private let query: Query
-	public typealias Query = (DatabaseConnectable) throws -> Future<Result>
+	public typealias Query = (Database) throws -> EventLoopFuture<Result>
 	
 	/// A function that determines whether a given result is permitted to be read on a given request.
 	private let hasReadPermission: (Result, Request) throws -> Bool
@@ -30,16 +30,16 @@ public struct QueryResult<Result> /*: DynamicProperty*/ {
 	private var storedResult: Result?
 	
 	// See protocol.
-	public func prepareForRendering(by renderer: Renderer) -> Future<Self> {
+	public func prepareForRendering(by renderer: Renderer) -> EventLoopFuture<Self> {
 		do {
-			return try query(renderer.request).map { result in
+			return try query(renderer.request.db).flatMapThrowing { result in
 				guard try self.hasReadPermission(result, renderer.request) else { throw ModelRetrievalError.unauthorised() }
 				var copy = self
 				copy.storedResult = result
 				return copy
 			}
 		} catch {
-			return renderer.request.future(error: error)
+			return renderer.request.eventLoop.makeFailedFuture(error)
 		}
 	}
 	
@@ -48,9 +48,9 @@ public struct QueryResult<Result> /*: DynamicProperty*/ {
 extension QueryResult where Result : Model {
 	
 	/// Creates a query result that retrieves a model value with specified identifier.
-	public init(identifier: Result.ID) {
+	public init(identifier: Result.IDValue) {
 		self.init {
-			Result.find(identifier, on: $0).map { value in
+			Result.find(identifier, on: $0).flatMapThrowing { value in
 				guard let value = value else { throw ModelRetrievalError.notFound() }
 				return value
 			}
@@ -59,10 +59,10 @@ extension QueryResult where Result : Model {
 	
 }
 
-extension QueryResult where Result : OptionalType, Result.WrappedType : Model {
+extension QueryResult where Result : Vapor.OptionalType, Result.WrappedType : Model {
 	
 	/// Creates a query result that retrieves a model value with specified identifier.
-	public init(identifier: Result.WrappedType.ID) {
+	public init(identifier: Result.WrappedType.IDValue) {
 		self.init {
 			Result.WrappedType.find(identifier, on: $0)
 				.map(Result.makeOptionalType)
@@ -82,9 +82,9 @@ extension QueryResult where Result : ControlledModel {
 	}
 	
 	/// Creates a query result that retrieves a model value with specified identifier.
-	public init(identifier: Result.ID, requiringReadPermission: Bool = true) {
+	public init(identifier: Result.IDValue, requiringReadPermission: Bool = true) {
 		self.init({
-			Result.find(identifier, on: $0).map { value in
+			Result.find(identifier, on: $0).flatMapThrowing { value in
 				guard let value = value else { throw ModelRetrievalError.notFound() }
 				return value
 			}
@@ -93,7 +93,7 @@ extension QueryResult where Result : ControlledModel {
 	
 }
 
-extension QueryResult where Result : OptionalType, Result.WrappedType : ControlledModel {
+extension QueryResult where Result : Vapor.OptionalType, Result.WrappedType : ControlledModel {
 	
 	/// Creates a query result with given query.
 	public init(_ query: @escaping Query, requiringReadPermission: Bool = true) {
@@ -106,7 +106,7 @@ extension QueryResult where Result : OptionalType, Result.WrappedType : Controll
 	}
 	
 	/// Creates a query result that retrieves a model value with specified identifier.
-	public init(identifier: Result.WrappedType.ID, requiringReadPermission: Bool = true) {
+	public init(identifier: Result.WrappedType.IDValue, requiringReadPermission: Bool = true) {
 		self.init({
 			Result.WrappedType.find(identifier, on: $0)
 				.map(Result.makeOptionalType)

@@ -18,7 +18,7 @@ public final class Realiser<ComponentType : Component> : ContextProvider {
 			.children
 			.compactMap { $0.value as? AnyExternalProperty }
 		
-		let completions = externalProperties.map { property -> Future<()> in
+		let completions = externalProperties.map { property -> EventLoopFuture<()> in
 			let description = property.typeErasedDescription
 			return description.value(context: context).map { result in
 				self.context.fulfill(description, with: result)
@@ -26,7 +26,7 @@ public final class Realiser<ComponentType : Component> : ContextProvider {
 		}
 		
 		if let eventLoop = completions.first?.eventLoop {
-			dependencyCompletion = Future.andAll(completions, eventLoop: eventLoop)
+			dependencyCompletion = EventLoopFuture.andAllSucceed(completions, on: eventLoop)
 		}
 		
 	}
@@ -38,14 +38,14 @@ public final class Realiser<ComponentType : Component> : ContextProvider {
 	public private(set) var context: Context
 	
 	/// A future completion of all external property dependencies, or `nil` if the component doesn't have any dependencies.
-	private var dependencyCompletion: Future<()>?
+	private var dependencyCompletion: EventLoopFuture<()>?
 	
 	/// Performs a scoped access of the component.
 	///
 	/// The component's body can be accessed within (and only within) the provided closure.
 	///
 	/// This method is reentrant over all instances of `Self` including `self`, i.e., `withRealisedComponent(_:on:)` invocations can be nested. When accessing a nested component, it must be scoped using its own realiser.
-	public func withRealisedComponent<Result>(_ access: @escaping ScopedAccessor<Result>, on worker: Worker) -> Future<Result> {
+	public func withRealisedComponent<Result>(_ access: @escaping ScopedAccessor<Result>, on request: Request) -> EventLoopFuture<Result> {
 		
 		func performScopedAccess() throws -> Result {
 			ContextProviderStack.local.push(self)
@@ -55,10 +55,10 @@ public final class Realiser<ComponentType : Component> : ContextProvider {
 		
 		if let completion = dependencyCompletion {
 			return completion
-				.map(performScopedAccess)
-				.hopTo(eventLoop: worker.eventLoop)
+				.flatMapThrowing(performScopedAccess)
+				.hop(to: request.eventLoop)
 		} else {
-			return Future.map(on: worker, performScopedAccess)
+			return EventLoopFuture.map(on: request.eventLoop, performScopedAccess)
 		}
 		
 	}

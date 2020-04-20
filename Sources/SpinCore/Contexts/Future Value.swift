@@ -22,11 +22,11 @@ public struct FutureValue<Value> /*: DynamicProperty*/ {
 	
 	/// A function producing the future value.
 	private let producer: Producer
-	public typealias Producer = (Request) throws -> Future<Value>
+	public typealias Producer = (Request) throws -> EventLoopFuture<Value>
 	
 	// See protocol.
-	public func prepareForRendering(by renderer: Renderer) -> Future<Self> {
-		Future.flatMap(on: renderer.request) {
+	public func prepareForRendering(by renderer: Renderer) -> EventLoopFuture<Self> {
+		return EventLoopFuture.flatMap(on: renderer.request.eventLoop) {
 			try self.producer(renderer.request)
 		}.map { value in
 			var copy = self

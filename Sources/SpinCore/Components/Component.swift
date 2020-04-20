@@ -24,7 +24,7 @@ public protocol Component {
 	///       @Contextual(\.user) var user
 	///       @Contextual(\.theme) var theme
 	///
-	///       func prepareForRendering(by renderer: Renderer) -> Future<Self> {
+	///       func prepareForRendering(by renderer: Renderer) -> EventLoopFuture<Self> {
 	///         prepareProperty(\._user, for: renderer)
 	///           .flatMap { $0.prepareProperty(\._theme, for: renderer) }
 	///       }
@@ -38,7 +38,7 @@ public protocol Component {
 	/// A future version of Spin might remove this requirement.
 	///
 	/// The default implementation returns `self` unaltered.
-	func prepareForRendering(by renderer: Renderer) -> Future<Self>
+	func prepareForRendering(by renderer: Renderer) -> EventLoopFuture<Self>
 	
 	/// Renders the component to given renderer.
 	///
@@ -53,8 +53,8 @@ public protocol Component {
 
 extension Component {
 	
-	public func prepareForRendering(by renderer: Renderer) -> Future<Self> {
-		renderer.request.future(self)
+	public func prepareForRendering(by renderer: Renderer) -> EventLoopFuture<Self> {
+		renderer.request.eventLoop.makeSucceededFuture(self)
 	}
 	
 	public func render(into renderer: inout Renderer) {

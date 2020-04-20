@@ -34,8 +34,8 @@ public enum AccessPermission : Int, Comparable, Hashable {
 extension ControlledModel {
 	
 	/// Retrieves a value and validates its read permission on given request.
-	public static func authenticatedFind(_ identifier: ID, on request: Request) -> Future<Self?> {
-		Self.find(identifier, on: request).map { value in
+	public static func authenticatedFind(_ identifier: IDValue, on request: Request) -> EventLoopFuture<Self?> {
+		Self.find(identifier, on: request.db).flatMapThrowing { value in
 			guard let value = value else { return nil }
 			try value.requirePermission(.read, on: request)
 			return value
@@ -43,34 +43,34 @@ extension ControlledModel {
 	}
 	
 	/// Creates the value in the database after validating its write permission on the given request.
-	public func authenticatedCreate(on request: Request) -> Future<Self> {
-		Future.flatMap(on: request) {
+	public func authenticatedCreate(on request: Request) -> EventLoopFuture<()> {
+		EventLoopFuture.flatMap(on: request.eventLoop) {
 			try self.requirePermission(.full, on: request)
-			return self.create(on: request)
+			return self.create(on: request.db)
 		}
 	}
 	
 	/// Saves the value in the database after validating its write permission on the given request.
-	public func authenticatedSave(on request: Request) -> Future<Self> {
-		Future.flatMap(on: request) {
+	public func authenticatedSave(on request: Request) -> EventLoopFuture<()> {
+		EventLoopFuture.flatMap(on: request.eventLoop) {
 			try self.requirePermission(.full, on: request)
-			return self.save(on: request)
+			return self.save(on: request.db)
 		}
 	}
 	
 	/// Updates the value on the database after validating its write permission on the given request.
-	public func authenticatedUpdate(on request: Request, originalID: ID? = nil) -> Future<Self> {
-		Future.flatMap(on: request) {
+	public func authenticatedUpdate(on request: Request) -> EventLoopFuture<()> {
+		EventLoopFuture.flatMap(on: request.eventLoop) {
 			try self.requirePermission(.full, on: request)
-			return self.update(on: request, originalID: originalID)
+			return self.update(on: request.db)
 		}
 	}
 	
 	/// Deletes the value on the database after validating its write permission on the given request.
-	public func authenticatedDelete(on request: Request, force: Bool = false) -> Future<()> {
-		Future.flatMap(on: request) {
+	public func authenticatedDelete(on request: Request, force: Bool = false) -> EventLoopFuture<()> {
+		EventLoopFuture.flatMap(on: request.eventLoop) {
 			try self.requirePermission(.full, on: request)
-			return self.delete(force: force, on: request)
+			return self.delete(force: force, on: request.db)
 		}
 	}
 	

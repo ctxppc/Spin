@@ -1,6 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
 import Vapor
+import NIO
 
 /// An object that can provide a component's context.
 public protocol ContextProvider : class {

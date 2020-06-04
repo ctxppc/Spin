@@ -5,7 +5,7 @@ import Foundation
 /// A value that represents an unprocessed fragment of HTML.
 ///
 /// Spin inserts the contents of a raw node as-is in the document's string representation, without any indentation or escaping beyond what already is in the raw string representation.
-public struct RawNode {
+public struct RawHTMLNode {
 	
 	/// Creates a raw node with given string representation.
 	public init(stringRepresentation: String) {
@@ -17,13 +17,13 @@ public struct RawNode {
 	
 }
 
-extension RawNode : Node {
+extension RawHTMLNode : HTMLNode {
 	
-	public func appendNode(_ node: Node, depth: Int) -> IndexPath {
+	public func appendNode(_ node: HTMLNode, depth: Int) -> IndexPath {
 		fatalError("Raw nodes cannot contain subnodes")
 	}
 	
-	public subscript (indexPath: IndexPath) -> Node {
+	public subscript (indexPath: IndexPath) -> HTMLNode {
 		
 		get {
 			assert(indexPath.isEmpty, "Raw nodes cannot contain subnodes")

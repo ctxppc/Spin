@@ -134,7 +134,7 @@ extension RoutesBuilder {
 	
 }
 
-extension EventLoopFuture where Value == [Node] {
+extension EventLoopFuture where Value == [HTMLNode] {
 	fileprivate func serialised(for request: Request) -> EventLoopFuture<Response> {
 		map { nodes in
 			let body = nodes.map {

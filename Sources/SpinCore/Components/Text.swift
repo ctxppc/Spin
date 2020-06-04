@@ -20,7 +20,7 @@ public struct Text : Component {
 	
 	// See protocol.
 	public func render(into renderer: inout Renderer) {
-		renderer.addNode(TextNode(value))
+		renderer.addNode(HTMLTextNode(value))
 	}
 	
 }

@@ -3,17 +3,17 @@
 import Foundation
 
 /// A child node of an element.
-public protocol Node {
+public protocol HTMLNode {
 	
 	/// Appends given node at given depth and returns the index path to the newly inserted node.
 	///
 	/// A `depth` of 0 indicates that the node should be appended to the list of nodes contained in `self`.
-	mutating func appendNode(_ node: Node, depth: Int) -> IndexPath
+	mutating func appendNode(_ node: HTMLNode, depth: Int) -> IndexPath
 	
 	/// Accesses a node.
 	///
 	/// - Invariant: The accessed node at the empty path is of type `Self`.
-	subscript (indexPath: IndexPath) -> Node { get set }
+	subscript (indexPath: IndexPath) -> HTMLNode { get set }
 	
 	/// Applies given attributes on itself, if applicable.
 	mutating func applyAttributes(_ attributes: [String : String])

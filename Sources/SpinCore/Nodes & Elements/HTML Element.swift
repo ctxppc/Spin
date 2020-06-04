@@ -3,10 +3,10 @@
 import Foundation
 
 /// A value that represents an HTML element.
-public struct Element {
+public struct HTMLElement {
 	
 	/// Creates an element.
-	public init(tagName: String, classNames: Set<String> = [], attributes: [String : String] = [:], explicitEndTag: Bool = false, subnodes: [Node] = []) {
+	public init(tagName: String, classNames: Set<String> = [], attributes: [String : String] = [:], explicitEndTag: Bool = false, subnodes: [HTMLNode] = []) {
 		self.tagName		= tagName
 		self.classNames		= classNames
 		self.attributes		= attributes
@@ -27,13 +27,13 @@ public struct Element {
 	public var explicitEndTag: Bool = false
 	
 	/// The nodes contained in the element's body.
-	public var subnodes: [Node] = []
+	public var subnodes: [HTMLNode] = []
 	
 }
 
-extension Element : Node {
+extension HTMLElement : HTMLNode {
 	
-	public mutating func appendNode(_ node: Node, depth: Int) -> IndexPath {
+	public mutating func appendNode(_ node: HTMLNode, depth: Int) -> IndexPath {
 		switch depth {
 			
 			case 0:
@@ -48,7 +48,7 @@ extension Element : Node {
 		}
 	}
 	
-	public subscript (indexPath: IndexPath) -> Node {
+	public subscript (indexPath: IndexPath) -> HTMLNode {
 		
 		get {
 			if indexPath.isEmpty {
@@ -137,7 +137,7 @@ extension Element : Node {
 	
 }
 
-extension Element {
+extension HTMLElement {
 	
 	/// Assigns an identifier to the element, overwriting any existing identifier.
 	public func identified(by identifier: String) -> Self {

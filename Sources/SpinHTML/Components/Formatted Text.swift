@@ -26,9 +26,9 @@ public struct FormattedText : Component {
 	public func render(into renderer: inout Renderer) {
 		for segment in spans {
 			switch segment {
-				case .normal(let text):				renderer.addNode(TextNode(text))
-				case .emphasised(let text):			renderer.addNode(Element(tagName: "em", subnodes: [TextNode(text)]))
-				case .stronglyEmphasised(let text):	renderer.addNode(Element(tagName: "strong", subnodes: [TextNode(text)]))
+				case .normal(let text):				renderer.addNode(HTMLTextNode(text))
+				case .emphasised(let text):			renderer.addNode(HTMLElement(tagName: "em", subnodes: [HTMLTextNode(text)]))
+				case .stronglyEmphasised(let text):	renderer.addNode(HTMLElement(tagName: "strong", subnodes: [HTMLTextNode(text)]))
 			}
 		}
 	}

@@ -3,7 +3,7 @@
 import Foundation
 
 /// A text node.
-public struct TextNode {
+public struct HTMLTextNode {
 	
 	/// Creates a text node with given text value.
 	public init(_ value: String) {
@@ -19,13 +19,13 @@ public struct TextNode {
 	
 }
 
-extension TextNode : Node {
+extension HTMLTextNode : HTMLNode {
 	
-	public func appendNode(_ node: Node, depth: Int) -> IndexPath {
+	public func appendNode(_ node: HTMLNode, depth: Int) -> IndexPath {
 		fatalError("Text nodes cannot contain subnodes")
 	}
 	
-	public subscript (indexPath: IndexPath) -> Node {
+	public subscript (indexPath: IndexPath) -> HTMLNode {
 		
 		get {
 			assert(indexPath.isEmpty, "Text nodes cannot contain subnodes")

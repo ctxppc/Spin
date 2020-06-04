@@ -2,7 +2,7 @@
 
 import SpinCore
 
-/// A component that presents exactly one child, depending on the currently active navigation element.
+/// A component that presents exactly one child and hides all others, depending on the currently active navigation element.
 ///
 /// A navigation area adds an additional level on the navigation path of the component wherein the navigation area is contained. This new navigation element identifies the presented navigation area's child. The first child is always accessible from the empty element. Other children are identified by their identifier which can be set using the `.identifier(_:)` modifier. Children without an explicit identifier are numbered, starting from 1. These implicit identifiers are not stable; it's therefore recommended to provide explicit identifiers.
 ///

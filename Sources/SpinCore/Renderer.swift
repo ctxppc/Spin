@@ -11,12 +11,12 @@ import Vapor
 public struct Renderer {
 	
 	/// Renders given component.
-	public static func render<C : Component>(_ component: C, for request: Request) -> EventLoopFuture<[Node]> {
+	public static func render<C : Component>(_ component: C, for request: Request) -> EventLoopFuture<[HTMLNode]> {
 		render(component, for: request, context: .init())
 	}
 	
 	/// Renders given component.
-	private static func render<C : Component>(_ component: C, for request: Request, context: Context) -> EventLoopFuture<[Node]> {
+	private static func render<C : Component>(_ component: C, for request: Request, context: Context) -> EventLoopFuture<[HTMLNode]> {
 		let renderer = Renderer(request: request, context: context)
 		return component.prepareForRendering(by: renderer).flatMap { component in
 			var renderer = renderer
@@ -35,13 +35,13 @@ public struct Renderer {
 	public let request: Request
 	
 	/// The nodes rendering the component.
-	public private(set) var nodes: [Node] = []
+	public private(set) var nodes: [HTMLNode] = []
 	
 	/// The future completions for all gaps.
 	private var futureGapCompletions: [EventLoopFuture<GapCompletion>] = []
 	private struct GapCompletion {
 		let indexPath: IndexPath
-		let nodes: [Node]
+		let nodes: [HTMLNode]
 	}
 	
 	/// The depth at which new nodes are added.
@@ -54,7 +54,7 @@ public struct Renderer {
 	}
 	
 	/// Adds a node to the node tree.
-	public mutating func addNode(_ node: Node) {
+	public mutating func addNode(_ node: HTMLNode) {
 		insertNode(node)
 	}
 	
@@ -62,7 +62,7 @@ public struct Renderer {
 	///
 	/// The element must be closed by invoking `closeElement()` on the renderer.
 	public mutating func openElement(tagName: String, classNames: Set<String> = [], attributeValuesByName: [String : String] = [:], explicitEndTag: Bool = false) {
-		insertNode(Element(tagName: tagName, classNames: classNames, attributes: attributeValuesByName, explicitEndTag: explicitEndTag))
+		insertNode(HTMLElement(tagName: tagName, classNames: classNames, attributes: attributeValuesByName, explicitEndTag: explicitEndTag))
 		openingDepth += 1
 	}
 	
@@ -76,7 +76,7 @@ public struct Renderer {
 	
 	/// Adds a node to the node tree and returns the index path to the newly inserted node.
 	@discardableResult
-	private mutating func insertNode(_ node: Node) -> IndexPath {
+	private mutating func insertNode(_ node: HTMLNode) -> IndexPath {
 		switch openingDepth {
 			
 			case 0:
@@ -97,7 +97,7 @@ public struct Renderer {
 	}
 	
 	/// Fulfills a gap in the node tree.
-	private mutating func materialiseGap(at indexPath: IndexPath, with nodes: [Node]) {
+	private mutating func materialiseGap(at indexPath: IndexPath, with nodes: [HTMLNode]) {
 		var indexPath = indexPath
 		let index = indexPath.removeFirst()
 		self.nodes[index][indexPath] = Gap(nodes: nodes)
@@ -113,7 +113,7 @@ public struct Renderer {
 	internal var context = Context()
 	
 	/// Returns the nodes produced by the component being rendered.
-	public func producedNodes() -> EventLoopFuture<[Node]> {
+	public func producedNodes() -> EventLoopFuture<[HTMLNode]> {
 		EventLoopFuture.reduce(into: self, futureGapCompletions, on: request.eventLoop) { renderer, gapCompletion in
 			renderer.materialiseGap(at: gapCompletion.indexPath, with: gapCompletion.nodes)
 		}.map { renderer in
@@ -135,23 +135,23 @@ public struct Renderer {
 }
 
 /// A node for a component that is eventually converted into nodes.
-private struct Gap : Node {
+private struct Gap : HTMLNode {
 	
 	/// Creates a gap node with given subnodes.
-	init(nodes: [Node] = []) {
+	init(nodes: [HTMLNode] = []) {
 		self.nodes = nodes
 	}
 	
 	/// The nodes produced by the component.
-	var nodes: [Node]
+	var nodes: [HTMLNode]
 	
 	// See protocol.
-	func appendNode(_ node: Node, depth: Int) -> IndexPath {
+	func appendNode(_ node: HTMLNode, depth: Int) -> IndexPath {
 		fatalError("Cannot insert nodes in a gap node")
 	}
 	
 	// See protocol.
-	subscript (indexPath: IndexPath) -> Node {
+	subscript (indexPath: IndexPath) -> HTMLNode {
 		
 		get {
 			assert(indexPath.isEmpty, "Cannot access nodes in a gap node")
@@ -191,7 +191,7 @@ private struct Gap : Node {
 	
 	// See protocol.
 	var isText: Bool {
-		nodes.contains(where: { $0 is TextNode })
+		nodes.contains(where: { $0 is HTMLTextNode })
 	}
 	
 }

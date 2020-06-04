@@ -9,13 +9,13 @@ public struct HTMLDTD {
 	
 }
 
-extension HTMLDTD : Node {
+extension HTMLDTD : HTMLNode {
 	
-	public func appendNode(_ node: Node, depth: Int) -> IndexPath {
+	public func appendNode(_ node: HTMLNode, depth: Int) -> IndexPath {
 		fatalError("HTML DTDs with subnodes are not supported")
 	}
 	
-	public subscript (indexPath: IndexPath) -> Node {
+	public subscript (indexPath: IndexPath) -> HTMLNode {
 		
 		get {
 			assert(indexPath.isEmpty, "HTML DTDs with subnodes are not supported")

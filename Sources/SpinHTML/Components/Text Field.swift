@@ -75,10 +75,10 @@ public struct TextField : Component {
 		
 		!editable --> (attributes["readonly"] = "true")
 		
-		renderer.addNode(Element(
+		renderer.addNode(HTMLElement(
 			tagName:	isLongForm ? "textarea" : "input",
 			attributes:	attributes,
-			subnodes:	isLongForm ? [TextNode(value)] : []
+			subnodes:	isLongForm ? [HTMLTextNode(value)] : []
 		))
 		
 	}

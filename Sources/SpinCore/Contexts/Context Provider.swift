@@ -4,7 +4,7 @@ import Vapor
 import NIO
 
 /// An object that can provide a component's context.
-public protocol ContextProvider : class {
+public protocol ContextProvider : AnyObject {
 	
 	/// The context.
 	var context: Context { get }

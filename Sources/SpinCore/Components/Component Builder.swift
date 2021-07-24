@@ -1,7 +1,7 @@
 // Spin © 2019–2020 Constantino Tsarouhas
 
 /// A parameter attribute that constructs components from closures.
-@_functionBuilder
+@resultBuilder
 public struct ComponentBuilder {
 	
 	public static func buildIf<C>(_ component: C?) -> Either<C, EmptyComponent> {

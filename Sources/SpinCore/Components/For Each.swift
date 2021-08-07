@@ -1,4 +1,4 @@
-// Spin © 2019–2020 Constantino Tsarouhas
+// Spin © 2019–2021 Constantino Tsarouhas
 
 /// A structural component that consists of children generated from an underlying collection of data, also known as a *mapping component*.
 ///

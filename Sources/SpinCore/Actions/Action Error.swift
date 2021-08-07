@@ -1,4 +1,4 @@
-// Spin © 2019–2020 Constantino Tsarouhas
+// Spin © 2019–2021 Constantino Tsarouhas
 
 /// An error during the execution of an action.
 public protocol ActionError : Error, Codable {

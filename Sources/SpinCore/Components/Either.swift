@@ -1,4 +1,4 @@
-// Spin © 2019–2020 Constantino Tsarouhas
+// Spin © 2019–2021 Constantino Tsarouhas
 
 /// A component that presents one of two components.
 public enum Either<First : Component, Second : Component> : Component {

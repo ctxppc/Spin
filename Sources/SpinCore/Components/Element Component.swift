@@ -1,4 +1,4 @@
-// Spin © 2019–2020 Constantino Tsarouhas
+// Spin © 2019–2021 Constantino Tsarouhas
 
 /// A component that represents a single element whose contents are determined by a function.
 public protocol ElementComponent : Component {

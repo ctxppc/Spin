@@ -1,5 +1,5 @@
 // swift-tools-version:5.5
-// Spin © 2019–2020 Constantino Tsarouhas
+// Spin © 2019–2021 Constantino Tsarouhas
 
 import PackageDescription
 

@@ -1,20 +1,22 @@
-// swift-tools-version:5.1
-// Spin © 2019–2020 Constantino Tsarouhas
+// swift-tools-version:5.5
+// Spin © 2019–2021 Constantino Tsarouhas
 
 import PackageDescription
 
 let package = Package(
 	name: "Spin",
-	platforms: [.macOS(.v10_15)],
+	platforms: [.macOS(.v12)],
 	products: [
-		.library(name: "Spin", targets: ["Spin"]),
+		.library(name: "Spin", targets: ["SpinCore"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.8.0")),
-		.package(url: "https://github.com/vapor/vapor.git", from: "3.3.1"),
-		.package(url: "https://github.com/vapor/fluent.git", from: "3.0.0"),
+		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.10.0")),
+		.package(url: "https://bitbucket.org/ctxppc/conifer.git", branch: "development"),
 	],
 	targets: [
-		.target(name: "Spin",  dependencies: ["Vapor", "DepthKit", "Fluent"]),
+		.target(name: "SpinCore",  dependencies: [
+			"DepthKit",
+			.product(name: "Conifer", package: "conifer"),
+		]),
 	]
 )

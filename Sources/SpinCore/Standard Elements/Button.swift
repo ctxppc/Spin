@@ -19,4 +19,8 @@ public struct Button<Contents : Fragment> : Fragment {
 		ElementFragment(tagName: "button", contents: contents)
 	}
 	
+	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+		graph.produce(XMLElement(), at: location[0])
+	}
+	
 }

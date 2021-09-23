@@ -10,13 +10,14 @@ let package = Package(
 		.library(name: "Spin", targets: ["SpinCore"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.10.0")),
 		.package(url: "https://bitbucket.org/ctxppc/conifer.git", branch: "development"),
+		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.10.0")),
 	],
 	targets: [
-		.target(name: "SpinCore",  dependencies: [
+		.target(name: "SpinCore", dependencies: [
 			"DepthKit",
 			.product(name: "Conifer", package: "conifer"),
 		]),
+		.testTarget(name: "SpinCoreTests", dependencies: ["SpinCore"]),
 	]
 )

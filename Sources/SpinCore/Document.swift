@@ -3,10 +3,10 @@
 import Conifer
 import Foundation
 
-/// A component representing a divider between different segments of a document.
-public struct Divider : Fragment {
+/// A top-level fragment representing an HTML document.
+public struct Document : Fragment {
 	
-	/// Creates a divider.
+	/// Creates a DTD.
 	public init() {}
 	
 	// See protocol.
@@ -16,7 +16,9 @@ public struct Divider : Fragment {
 	
 	// See protocol.
 	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(name: "hr") as! G.Artefact, at: location)
+		let document = XMLDocument()
+		document.documentContentKind = .xhtml
+		graph.produce(document as! G.Artefact, at: location)
 	}
 	
 }

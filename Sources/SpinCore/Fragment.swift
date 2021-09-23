@@ -5,3 +5,6 @@ import Foundation
 
 /// A part of an HTML document.
 public protocol Fragment : Component where Body : Fragment {}
+
+extension Empty : Fragment {}
+extension Never : Fragment {}

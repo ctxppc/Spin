@@ -19,26 +19,25 @@ public struct Link<Contents : Fragment> : Fragment {
 	public let contents: () -> Contents
 	
 	// See protocol.
-	public var body: some Fragment {
-		ElementFragment(tagName: "a", contents: contents)
+	public var body: Never {
+		Never.hasNoBody(self)
+	}
+	
+	// See protocol.
+	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+		graph.produce(XMLElement(name: "a") as! G.Artefact, at: location)
+		await graph.render(contents(), at: location[0])
 	}
 	
 }
 
-//extension Link where Contents == Text {
-//	
-//	/// Creates a link referencing given URL and containing given text.
-//	public init(to location: URL, label: String) {
-//		self.init(to: location) {
-//			Text(label)
-//		}
-//	}
-//	
-//	/// Creates a link referencing given component and containing given text.
-//	public init<C : LocatableComponent>(to component: C, label: String) {
-//		self.init(to: component) {
-//			Text(label)
-//		}
-//	}
-//	
-//}
+extension Link where Contents == Text {
+	
+	/// Creates a link referencing given URL and containing given text.
+	public init(_ label: String, to location: URL) {
+		self.init(to: location) {
+			Text(label)
+		}
+	}
+	
+}

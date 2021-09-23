@@ -1,6 +1,7 @@
 // Spin © 2019–2021 Constantino Tsarouhas
 
 import Conifer
+import Foundation
 
 /// A component representing an HTML document.
 public struct NavigationArea<Contents : Fragment> : Fragment {
@@ -13,8 +14,14 @@ public struct NavigationArea<Contents : Fragment> : Fragment {
 	public let contents: () -> Contents
 	
 	// See protocol.
-	public var body: some Fragment {
-		ElementFragment(tagName: "nav", contents: contents)
+	public var body: Never {
+		Never.hasNoBody(self)
+	}
+	
+	// See protocol.
+	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+		graph.produce(XMLElement(name: "nav") as! G.Artefact, at: location)
+		await graph.render(contents(), at: location[0])
 	}
 	
 }

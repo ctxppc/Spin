@@ -1,6 +1,7 @@
 // Spin © 2019–2021 Constantino Tsarouhas
 
 import Conifer
+import Foundation
 
 /// An actionable button in a document.
 public struct Button<Contents : Fragment> : Fragment {
@@ -15,12 +16,14 @@ public struct Button<Contents : Fragment> : Fragment {
 	typealias ContentsProvider = () -> Contents
 	
 	// See protocol.
-	public var body: some Fragment {
-		ElementFragment(tagName: "button", contents: contents)
+	public var body: Never {
+		Never.hasNoBody(self)
 	}
 	
+	// See protocol.
 	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(), at: location[0])
+		graph.produce(XMLElement(name: "button") as! G.Artefact, at: location)
+		await graph.render(contents(), at: location[0])
 	}
 	
 }

@@ -1,7 +1,8 @@
 // Spin © 2019–2021 Constantino Tsarouhas
 
-import DepthKit
 import Conifer
+import DepthKit
+import Foundation
 
 /// An interactive element that accepts text.
 public struct TextField : Fragment {
@@ -42,8 +43,13 @@ public struct TextField : Fragment {
 	private let editable: Bool
 	
 	// See protocol.
-	public var body: some Fragment {
-		ElementFragment(tagName: "button") {}
+	public var body: Never {
+		Never.hasNoBody(self)
+	}
+	
+	// See protocol.
+	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+		graph.produce(XMLElement(name: "input") as! G.Artefact, at: location)
 	}
 	
 	// See protocol.

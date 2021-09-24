@@ -1,6 +1,7 @@
 // Spin © 2019–2021 Constantino Tsarouhas
 
 import Conifer
+import DepthKit
 import Foundation
 
 /// A group of input elements in a form.
@@ -25,7 +26,9 @@ public struct FieldGroup<Contents : Fragment> : Fragment {
 	
 	// See protocol.
 	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(name: "fieldset") as! G.Artefact, at: location)
+		graph.produce(with(XMLElement(name: "fieldset")) {
+			$0.setAttributesWith(enabled ? [:] : ["disabled": "disabled"])
+		} as! G.Artefact, at: location)
 		await graph.render(contents(), at: location[0])
 	}
 	

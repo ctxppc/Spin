@@ -18,6 +18,6 @@ let package = Package(
 			"DepthKit",
 			.product(name: "Conifer", package: "conifer"),
 		]),
-		.testTarget(name: "SpinCoreTests", dependencies: ["SpinCore"]),
+//		.testTarget(name: "SpinCoreTests", dependencies: ["SpinCore"]),	// TODO: Uncomment when async build error is resolved.
 	]
 )

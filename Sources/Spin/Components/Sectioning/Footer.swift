@@ -3,15 +3,15 @@
 import Conifer
 import DepthKit
 
-/// A component that provides a title, introductory text, or other content at the top of the enclosing containing component (e.g., document, section, article, group, or table).
-public struct Header<Contents : Component> : Component {
+/// A component that provides copyright notices, author information, disclaimers, summaries, or other content at the bottom of the nearest enclosing sectioning component (e.g., document, section, article, group, or table).
+public struct Footer<Contents : Component> : Component {
 	
-	/// Creates a header with given contents.
+	/// Creates a footer with given contents.
 	public init(@ComponentBuilder _ contents: @escaping ContentsProvider) {
 		self.contents = contents
 	}
 	
-	/// The header's contents.
+	/// The footer's contents.
 	public let contents: ContentsProvider
 	public typealias ContentsProvider = () -> Contents
 	

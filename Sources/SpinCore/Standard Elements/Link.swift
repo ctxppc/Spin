@@ -1,6 +1,7 @@
 // Spin © 2019–2021 Constantino Tsarouhas
 
 import Conifer
+import DepthKit
 import Foundation
 
 /// A component representing an HTML document.
@@ -25,7 +26,9 @@ public struct Link<Contents : Fragment> : Fragment {
 	
 	// See protocol.
 	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(name: "a") as! G.Artefact, at: location)
+		graph.produce(with(XMLElement(name: "a")) {
+			$0.setAttributesWith(["href": url.absoluteString])
+		} as! G.Artefact, at: location)
 		await graph.render(contents(), at: location[0])
 	}
 	

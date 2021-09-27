@@ -1,6 +1,7 @@
 // Spin © 2019–2021 Constantino Tsarouhas
 
 import Conifer
+import DepthKit
 import Foundation
 
 /// A label for an input element.
@@ -11,7 +12,7 @@ public struct Label<Contents : Fragment> : Fragment {
 		self.contents = contents
 	}
 	
-	// See protocol.
+	/// The identifier of the input control for which the label applies.
 	public let targetIdentifier: String
 	
 	// See protocol.
@@ -24,7 +25,9 @@ public struct Label<Contents : Fragment> : Fragment {
 	
 	// See protocol.
 	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(name: "label") as! G.Artefact, at: location)
+		graph.produce(with(XMLElement(name: "label")) {
+			$0.setAttributesWith(["for": targetIdentifier])
+		} as! G.Artefact, at: location)
 		await graph.render(contents(), at: location[0])
 	}
 	

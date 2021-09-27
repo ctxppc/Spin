@@ -1,6 +1,7 @@
 // Spin © 2019–2021 Constantino Tsarouhas
 
 import Conifer
+import DepthKit
 import Foundation
 
 /// A form that can be submitted.
@@ -26,7 +27,9 @@ public struct Form<Contents : Fragment> : Fragment {
 	
 	// See protocol.
 	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(name: "form") as! G.Artefact, at: location)
+		graph.produce(with(XMLElement(name: "form")) {
+			$0.setAttributesWith(["action": url.absoluteString])
+		} as! G.Artefact, at: location)
 		await graph.render(contents(), at: location[0])
 	}
 	

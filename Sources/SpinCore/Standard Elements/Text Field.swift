@@ -49,34 +49,33 @@ public struct TextField : Fragment {
 	
 	// See protocol.
 	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(name: "input") as! G.Artefact, at: location)
+		
+		let isLongForm = kind == .longform
+		
+		graph.produce(with(XMLElement(name: isLongForm ? "textarea" : "input")) {
+			
+			var attributes = ["name": name]
+			
+			!isLongForm --> (attributes["type"] = kind.rawValue)
+			
+			let value = self.value.trimmingCharacters(in: .whitespacesAndNewlines)
+			(!value.isEmpty && !isLongForm) --> (attributes["value"] = value)
+			
+			let newPlaceholder = placeholder.trimmingCharacters(in: .whitespacesAndNewlines)
+			!newPlaceholder.isEmpty --> (attributes["placeholder"] = newPlaceholder)
+			
+			required --> (attributes["required"] = "true")
+			
+			!editable --> (attributes["readonly"] = "true")
+			
+			$0.setAttributesWith(attributes)
+			
+		} as! G.Artefact, at: location)
+		
+		if isLongForm {
+			graph.produce(XMLNode.text(withStringValue: value) as! G.Artefact, at: location[0])
+		}
+		
 	}
-	
-	// See protocol.
-//	public func render(into renderer: inout Renderer) {
-//
-//		let isLongForm = kind == .longform
-//
-//		var attributes = ["name": name]
-//
-//		!isLongForm --> (attributes["type"] = kind.rawValue)
-//
-//		let value = self.value.trimmingCharacters(in: .whitespacesAndNewlines)
-//		(!value.isEmpty && !isLongForm) --> (attributes["value"] = value)
-//
-//		let newPlaceholder = placeholder.trimmingCharacters(in: .whitespacesAndNewlines)
-//		!newPlaceholder.isEmpty --> (attributes["placeholder"] = newPlaceholder)
-//
-//		required --> (attributes["required"] = "true")
-//
-//		!editable --> (attributes["readonly"] = "true")
-//
-//		renderer.addNode(HTMLElement(
-//			tagName:	isLongForm ? "textarea" : "input",
-//			attributes:	attributes,
-//			subnodes:	isLongForm ? [HTMLTextNode(value)] : []
-//		))
-//
-//	}
 	
 }

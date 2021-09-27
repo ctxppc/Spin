@@ -7,17 +7,26 @@ let package = Package(
 	name: "Spin",
 	platforms: [.macOS(.v12)],
 	products: [
-		.library(name: "Spin", targets: ["SpinCore"]),
+		
+		/// A library for composing web applications from semantic building blocks.
+		.library(name: "Spin", targets: ["Spin"]),
+		
+		/// A library for composing HTML documents from standard elements.
+		.library(name: "SpinHTML", targets: ["SpinHTML"]),
+		
 	],
 	dependencies: [
 		.package(url: "https://bitbucket.org/ctxppc/conifer.git", branch: "development"),
 		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.10.0")),
 	],
 	targets: [
-		.target(name: "SpinCore", dependencies: [
+		.target(name: "Spin", dependencies: [
+			"SpinHTML"
+		]),
+		.target(name: "SpinHTML", dependencies: [
 			"DepthKit",
 			.product(name: "Conifer", package: "conifer"),
 		]),
-//		.testTarget(name: "SpinCoreTests", dependencies: ["SpinCore"]),	// TODO: Uncomment when async build error is resolved.
+//		.testTarget(name: "SpinHTMLTests", dependencies: ["SpinHTML"]),	// TODO: Uncomment when async build error is resolved.
 	]
 )

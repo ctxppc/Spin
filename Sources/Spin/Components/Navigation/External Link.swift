@@ -6,7 +6,7 @@ import Foundation
 
 /// A component that enables the user or reader to view a resource that isn't part of the web application or site.
 ///
-/// For links to internal locations, see `Link`.
+/// For a link to an internal location, use a `Link`.
 public struct ExternalLink<Contents : Component> : Component {
 	
 	/// Creates a link with given contents.

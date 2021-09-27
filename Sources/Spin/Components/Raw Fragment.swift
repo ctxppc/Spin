@@ -2,18 +2,17 @@
 
 import Conifer
 import DepthKit
+import SpinHTML
 
-/// A component that groups components that form a standalone and atomic unit of content like a blog post, blog comment, or newspaper article.
-///
-/// A typical article consists of a header (`Header`), body, and footer (`Footer`). Standalone text components in the body are presumed to be paragraphs of the article.
-public struct Article<Contents : Component> : Component {
+/// A component consisting of a fragment of an HTML document with no further processing.
+public struct RawFragment<Contents : Fragment> : Component {
 	
-	/// Creates an article with given contents.
+	/// Creates a component consisting of a given fragment.
 	public init(@ComponentBuilder _ contents: @escaping ContentsProvider) {
 		self.contents = contents
 	}
 	
-	/// The article's contents.
+	/// The component's fragment contents.
 	public let contents: ContentsProvider
 	public typealias ContentsProvider = () -> Contents
 	

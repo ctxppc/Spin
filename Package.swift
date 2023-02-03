@@ -1,5 +1,5 @@
-// swift-tools-version:5.5
-// Spin © 2019–2021 Constantino Tsarouhas
+// swift-tools-version:5.7
+// Spin © 2019–2023 Constantino Tsarouhas
 
 import PackageDescription
 
@@ -27,6 +27,6 @@ let package = Package(
 			"DepthKit",
 			.product(name: "Conifer", package: "conifer"),
 		]),
-//		.testTarget(name: "SpinHTMLTests", dependencies: ["SpinHTML"]),	// TODO: Uncomment when async build error is resolved.
+		.testTarget(name: "SpinHTMLTests", dependencies: ["SpinHTML"]),
 	]
 )

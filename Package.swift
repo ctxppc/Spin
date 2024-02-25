@@ -9,10 +9,13 @@ let package = Package(
 	products: [
 		
 		/// A library for composing web applications from semantic building blocks.
-		.library(name: "SpinCore", targets: ["SpinCore"]),
+		.library(name: "Spin", targets: ["Spin"]),
 		
 		/// A library for composing HTML documents from standard elements.
 		.library(name: "SpinHTML", targets: ["SpinHTML"]),
+		
+		/// A library for composing XML documents.
+		.library(name: "SpinXML", targets: ["SpinXML"]),
 		
 	],
 	dependencies: [
@@ -20,13 +23,20 @@ let package = Package(
 		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.10.0")),
 	],
 	targets: [
-		.target(name: "SpinCore", dependencies: [
+		
+		.target(name: "Spin", dependencies: [
 			"SpinHTML"
 		]),
+		
 		.target(name: "SpinHTML", dependencies: [
+			"SpinXML"
+		]),
+		.testTarget(name: "SpinHTMLTests", dependencies: ["SpinHTML"]),
+		
+		.target(name: "SpinXML", dependencies: [
 			"DepthKit",
 			.product(name: "Conifer", package: "conifer"),
 		]),
-		.testTarget(name: "SpinHTMLTests", dependencies: ["SpinHTML"]),
+		
 	]
 )

@@ -2,7 +2,7 @@
 
 import Conifer
 
-/// A part of a Spin site.
+/// A part of a Spin app.
 public protocol Component : Conifer.Component where Body : Component {}
 
 extension Never : Component {}

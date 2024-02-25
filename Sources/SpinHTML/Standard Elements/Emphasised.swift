@@ -1,4 +1,4 @@
-// Spin © 2019–2023 Constantino Tsarouhas
+// Spin © 2019–2024 Constantino Tsarouhas
 
 import Conifer
 import Foundation

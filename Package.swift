@@ -1,11 +1,11 @@
-// swift-tools-version:5.7
-// Spin © 2019–2023 Constantino Tsarouhas
+// swift-tools-version:5.9
+// Spin © 2019–2024 Constantino Tsarouhas
 
 import PackageDescription
 
 let package = Package(
 	name: "Spin",
-	platforms: [.macOS(.v12)],
+	platforms: [.macOS(.v14)],
 	products: [
 		
 		/// A library for composing web applications from semantic building blocks.

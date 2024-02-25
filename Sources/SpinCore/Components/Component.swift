@@ -9,5 +9,5 @@ extension Never : Component {}
 extension Empty : Component {}
 extension Optional : Component where Wrapped : Component {}
 extension Either : Component where First : Component, Second : Component {}
-extension Group : Component where First : Component, Second : Component {}
+extension Group : Component where repeat each Child : Component {}
 extension ForEach : Component where Content : Component {}

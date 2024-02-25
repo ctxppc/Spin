@@ -7,21 +7,16 @@ import DepthKit
 public struct Footer<Contents : Component> : Component {
 	
 	/// Creates a footer with given contents.
-	public init(@ComponentBuilder _ contents: @escaping ContentsProvider) {
+	public init(@ComponentBuilder _ contents: @escaping ContentProvider) {
 		self.contents = contents
 	}
 	
 	/// The footer's contents.
-	public let contents: ContentsProvider
-	public typealias ContentsProvider = () -> Contents
+	public let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

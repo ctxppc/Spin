@@ -7,7 +7,7 @@ import DepthKit
 public struct List<Contents : Component> : Component {
 	
 	/// Creates a list with given contents.
-	public init(ordered: Bool = false, @ComponentBuilder _ contents: @escaping ContentsProvider) {
+	public init(ordered: Bool = false, @ComponentBuilder _ contents: @escaping ContentProvider) {
 		self.ordered = ordered
 		self.contents = contents
 	}
@@ -18,16 +18,11 @@ public struct List<Contents : Component> : Component {
 	public let ordered: Bool
 	
 	/// The list contents.
-	public let contents: ContentsProvider
-	public typealias ContentsProvider = () -> Contents
+	public let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

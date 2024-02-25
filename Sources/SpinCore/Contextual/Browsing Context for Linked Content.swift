@@ -16,7 +16,7 @@ extension Context {
 	
 }
 
-public enum BrowsingContext : Hashable {
+public enum BrowsingContext : Hashable, Sendable {
 	
 	/// The current browsing context.
 	case current

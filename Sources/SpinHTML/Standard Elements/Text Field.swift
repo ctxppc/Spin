@@ -28,7 +28,7 @@ public struct TextField : Fragment {
 	
 	/// The kind of text field.
 	private let kind: Kind
-	public enum Kind : String {
+	public enum Kind : String, Sendable {
 		case shortform = "text"
 		case email
 		case password
@@ -43,39 +43,8 @@ public struct TextField : Fragment {
 	private let editable: Bool
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		
-		let isLongForm = kind == .longform
-		
-		graph.produce(with(XMLElement(name: isLongForm ? "textarea" : "input")) {
-			
-			var attributes = ["name": name]
-			
-			!isLongForm --> (attributes["type"] = kind.rawValue)
-			
-			let value = self.value.trimmingCharacters(in: .whitespacesAndNewlines)
-			(!value.isEmpty && !isLongForm) --> (attributes["value"] = value)
-			
-			let newPlaceholder = placeholder.trimmingCharacters(in: .whitespacesAndNewlines)
-			!newPlaceholder.isEmpty --> (attributes["placeholder"] = newPlaceholder)
-			
-			required --> (attributes["required"] = "true")
-			
-			!editable --> (attributes["readonly"] = "true")
-			
-			$0.setAttributesWith(attributes)
-			
-		} as! G.Artefact, at: location)
-		
-		if isLongForm {
-			graph.produce(XMLNode.text(withStringValue: value) as! G.Artefact, at: location[0])
-		}
-		
+	public var body: some Fragment {
+		TODO.unimplemented
 	}
 	
 }

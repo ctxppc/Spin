@@ -10,7 +10,7 @@ import Foundation
 public struct ExternalLink<Contents : Component> : Component {
 	
 	/// Creates a link with given contents.
-	public init(to url: URL, @ComponentBuilder _ contents: @escaping ContentsProvider) {
+	public init(to url: URL, @ComponentBuilder _ contents: @escaping ContentProvider) {
 		self.url = url
 		self.contents = contents
 	}
@@ -19,20 +19,15 @@ public struct ExternalLink<Contents : Component> : Component {
 	public let url: URL
 	
 	/// The link's contents.
-	public let contents: ContentsProvider
-	public typealias ContentsProvider = () -> Contents
+	public let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	/// The browsing context to use for presenting the linked content.
 	@Contextual(\.browsingContextForLinkedExternalContent)
 	private var browsingContextForLinkedContent: BrowsingContext
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

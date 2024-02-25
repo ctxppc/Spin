@@ -15,13 +15,8 @@ public struct Text : Fragment {
 	public var value: String
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLNode.text(withStringValue: value) as! G.Artefact, at: location)
+	public var body: some Fragment {
+		TODO.unimplemented
 	}
 	
 }

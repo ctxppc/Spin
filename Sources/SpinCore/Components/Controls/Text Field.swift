@@ -14,7 +14,7 @@ public struct TextField : Component {
 	
 	/// The kind of text field.
 	public let kind: Kind
-	public enum Kind : String {
+	public enum Kind : String, Sendable {
 		case shortform = "text"
 		case email
 		case password
@@ -27,12 +27,7 @@ public struct TextField : Component {
 	private var value: String
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

@@ -15,12 +15,7 @@ public struct Text : Component {
 	public let value: String
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

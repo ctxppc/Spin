@@ -9,26 +9,21 @@ import DepthKit
 public struct Button<Contents : Component> : Component {
 	
 	/// Creates a button.
-	public init(action: @escaping Action, @ComponentBuilder _ contents: @escaping ContentsProvider) {
+	public init(action: @escaping Action, @ComponentBuilder _ contents: @escaping ContentProvider) {
 		self.action = action
 		self.contents = contents
 	}
 	
 	/// A function invoked when the user interacts with the button.
 	public let action: Action
-	public typealias Action = () -> ()
+	public typealias Action = @Sendable () -> ()
 	
 	/// The button's contents.
-	public let contents: ContentsProvider
-	public typealias ContentsProvider = () -> Contents
+	public let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

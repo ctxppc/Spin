@@ -8,7 +8,7 @@ import Foundation
 public struct Link<Contents : Fragment> : Fragment {
 	
 	/// Creates a link referencing given URL and containing given contents.
-	public init(to url: URL, @ComponentBuilder contents: @escaping () -> Contents) {
+	public init(to url: URL, @ComponentBuilder contents: @escaping ContentProvider) {
 		self.url = url
 		self.contents = contents
 	}
@@ -17,19 +17,12 @@ public struct Link<Contents : Fragment> : Fragment {
 	public let url: URL
 	
 	/// The link's contents.
-	public let contents: () -> Contents
+	public let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(with(XMLElement(name: "a")) {
-			$0.setAttributesWith(["href": url.absoluteString])
-		} as! G.Artefact, at: location)
-		await graph.render(contents(), at: location[0])
+	public var body: some Fragment {
+		TODO.unimplemented
 	}
 	
 }

@@ -7,23 +7,17 @@ import Foundation
 public struct Division<Contents : Fragment> : Fragment {
 	
 	/// Creates a division with given contents.
-	public init(@ComponentBuilder contents: @escaping () -> Contents) {
+	public init(@ComponentBuilder contents: @escaping ContentProvider) {
 		self.contents = contents
 	}
 	
 	/// The division's contents.
-	let contents: ContentsProvider
-	typealias ContentsProvider = () -> Contents
+	let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
-		graph.produce(XMLElement(name: "div") as! G.Artefact, at: location)
-		await graph.render(contents(), at: location[0])
+	public var body: some Fragment {
+		TODO.unimplemented
 	}
 	
 }

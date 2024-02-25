@@ -7,9 +7,6 @@ import XCTest
 
 final class WelcomePageTestCase : XCTestCase {
 	func testHTML() async {
-		var graph = ShadowGraph<XMLNode>()
-		await graph.render(Button {
-			Text("Do thing")
-		}, at: .root)
+		// TODO
 	}
 }

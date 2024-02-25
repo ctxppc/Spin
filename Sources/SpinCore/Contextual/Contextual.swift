@@ -5,7 +5,7 @@ import DepthKit
 
 /// A value providing access to a property in a component's context.
 @propertyWrapper
-public struct Contextual<Value> {
+public struct Contextual<Value : Sendable> : @unchecked Sendable {
 	
 	/// Creates a value providing access to a property in a component's context.
 	public init(_ keyPath: KeyPath<Context, Value>) {

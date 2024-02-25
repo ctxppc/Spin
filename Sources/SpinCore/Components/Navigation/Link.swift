@@ -11,7 +11,7 @@ import DepthKit
 public struct Link<LinkedContent : Component, Contents : Component> : Component {
 	
 	/// Creates a link.
-	public init(to linkedContent: LinkedContent, @ComponentBuilder _ contents: @escaping ContentsProvider) {
+	public init(to linkedContent: LinkedContent, @ComponentBuilder _ contents: @escaping ContentProvider) {
 		self.linkedContent = linkedContent
 		self.contents = contents
 	}
@@ -20,20 +20,15 @@ public struct Link<LinkedContent : Component, Contents : Component> : Component 
 	public let linkedContent: LinkedContent
 	
 	/// The link's contents.
-	public let contents: ContentsProvider
-	public typealias ContentsProvider = () -> Contents
+	public let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	/// The browsing context to use for presenting the linked content.
 	@Contextual(\.browsingContextForLinkedInternalContent)
 	private var browsingContextForLinkedContent: BrowsingContext
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

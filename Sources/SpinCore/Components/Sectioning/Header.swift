@@ -7,21 +7,16 @@ import DepthKit
 public struct Header<Contents : Component> : Component {
 	
 	/// Creates a header with given contents.
-	public init(@ComponentBuilder _ contents: @escaping ContentsProvider) {
+	public init(@ComponentBuilder _ contents: @escaping ContentProvider) {
 		self.contents = contents
 	}
 	
 	/// The header's contents.
-	public let contents: ContentsProvider
-	public typealias ContentsProvider = () -> Contents
+	public let contents: ContentProvider
+	public typealias ContentProvider = @Sendable () -> Contents
 	
 	// See protocol.
-	public var body: Never {
-		Never.hasNoBody(self)
-	}
-	
-	// See protocol.
-	public func render<G>(in graph: inout G, at location: ShadowGraphLocation) async where G : ShadowGraphProtocol {
+	public var body: some Component {
 		TODO.unimplemented
 	}
 	

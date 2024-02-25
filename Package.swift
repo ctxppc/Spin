@@ -9,7 +9,7 @@ let package = Package(
 	products: [
 		
 		/// A library for composing web applications from semantic building blocks.
-		.library(name: "Spin", targets: ["Spin"]),
+		.library(name: "SpinCore", targets: ["SpinCore"]),
 		
 		/// A library for composing HTML documents from standard elements.
 		.library(name: "SpinHTML", targets: ["SpinHTML"]),
@@ -20,7 +20,7 @@ let package = Package(
 		.package(url: "https://github.com/ctxppc/DepthKit.git", .upToNextMinor(from: "0.10.0")),
 	],
 	targets: [
-		.target(name: "Spin", dependencies: [
+		.target(name: "SpinCore", dependencies: [
 			"SpinHTML"
 		]),
 		.target(name: "SpinHTML", dependencies: [

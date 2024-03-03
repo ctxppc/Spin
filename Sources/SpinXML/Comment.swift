@@ -1,6 +1,7 @@
 // Spin © 2019–2024 Constantino Tsarouhas
 
 import Conifer
+import Foundation
 
 /// An XML attribute.
 public struct Comment : Fragment {
@@ -15,7 +16,15 @@ public struct Comment : Fragment {
 	
 	// See protocol.
 	public var body: some Fragment {
-		TODO.unimplemented
+		Empty()
+	}
+	
+	// See protocol.
+	public static var nodeKind: XMLNode.Kind { .comment }
+	
+	// See protocol.
+	public static func update(_ node: XMLNode, for shadow: Shadow<Self>) async throws {
+		node.stringValue = try await shadow.text
 	}
 	
 }

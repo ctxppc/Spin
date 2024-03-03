@@ -6,7 +6,7 @@
       "location" : "https://bitbucket.org/ctxppc/conifer.git",
       "state" : {
         "branch" : "development",
-        "revision" : "7be7377d3b0e0e4bd8501b9b45ee10a2ee5f5f48"
+        "revision" : "c568ee6d45e3f94563e475772f820c8e5c34f1f8"
       }
     },
     {
@@ -34,6 +34,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "a8f66fda2e8713955323483365fe711a56b91974"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax",
+      "state" : {
+        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
+        "version" : "509.1.1"
       }
     }
   ],
